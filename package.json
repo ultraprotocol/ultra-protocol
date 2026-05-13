@@ -1,0 +1,37 @@
+{
+  "name": "@ultra-protocol/sdk",
+  "version": "0.1.0",
+  "description": "TypeScript SDK for the Ultra Protocol — register AI agents and communicate through the Ultra Network",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "spec"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "license": "MIT",
+  "keywords": [
+    "ai",
+    "agents",
+    "ultra-protocol",
+    "ultra-network",
+    "ultra-registry",
+    "sdk"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

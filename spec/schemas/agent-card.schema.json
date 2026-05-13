@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ultra.ai/schemas/agent-card.schema.json",
+  "title": "Ultra Registry Agent Card",
+  "description": "Public record for an agent registered in the Ultra Registry",
+  "type": "object",
+  "required": [
+    "address",
+    "handle",
+    "displayName",
+    "role",
+    "did",
+    "tier",
+    "verifiedDomains",
+    "industries",
+    "capabilities",
+    "registeredAt"
+  ],
+  "properties": {
+    "address": {
+      "type": "string",
+      "description": "Canonical Ultra address in the form <handle>@u.ultra.ai",
+      "pattern": "^[a-z0-9](?:[a-z0-9-]{1,28}[a-z0-9])?@u\\.ultra\\.ai$|^[a-z0-9]{3}@u\\.ultra\\.ai$",
+      "examples": ["acme-corp@u.ultra.ai", "my-agent@u.ultra.ai"]
+    },
+    "handle": {
+      "type": "string",
+      "description": "Handle segment of the address, without the @u.ultra.ai suffix",
+      "pattern": "^[a-z0-9](?:[a-z0-9-]{1,28}[a-z0-9])?$|^[a-z0-9]{3}$",
+      "minLength": 3,
+      "maxLength": 30,
+      "examples": ["acme-corp", "my-agent"]
+    },
+    "displayName": {
+      "type": "string",
+      "description": "Human-readable display name for the agent",
+      "maxLength": 100,
+      "examples": ["Acme Corp", "My Agent"]
+    },
+    "role": {
+      "type": "string",
+      "description": "Functional role of this agent within the Ultra Network",
+      "enum": ["individual", "organization", "service"]
+    },
+    "did": {
+      "type": "string",
+      "description": "W3C Decentralized Identifier for this agent",
+      "pattern": "^did:web:ultra\\.ai:registry:[a-z0-9][a-z0-9-]{1,28}[a-z0-9]$|^did:web:ultra\\.ai:registry:[a-z0-9]{3}$",
+      "examples": ["did:web:ultra.ai:registry:acme-corp"]
+    },
+    "bio": {
+      "type": ["string", "null"],
+      "description": "Short biography or description of what this agent does",
+      "maxLength": 500,
+      "examples": ["We automate legal contract review using AI."]
+    },
+    "tier": {
+      "type": "integer",
+      "description": "Trust tier: 0 = anonymous, 1 = domain-verified",
+      "enum": [0, 1]
+    },
+    "verifiedDomains": {
+      "type": "array",
+      "description": "Domains confirmed via DNS TXT verification (Level 1 agents only)",
+      "items": {
+        "type": "string"
+      },
+      "examples": [["acme.com", "acme.io"]]
+    },
+    "industries": {
+      "type": "array",
+      "description": "Industry sectors this agent operates in",
+      "items": {
+        "type": "string"
+      },
+      "examples": [["legal", "fintech"]]
+    },
+    "capabilities": {
+      "type": "array",
+      "description": "Capability tags describing what this agent can do",
+      "items": {
+        "type": "string"
+      },
+      "examples": [["contract-review", "legal-nlp", "due-diligence"]]
+    },
+    "registeredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of when this agent was registered"
+    }
+  },
+  "additionalProperties": false
+}

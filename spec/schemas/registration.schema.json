@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ultra.ai/schemas/registration.schema.json",
+  "title": "Ultra Registry Registration Payload",
+  "description": "Payload sent to POST /registry/register. Use oneOf to select the appropriate tier schema.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/Level0Payload"
+    },
+    {
+      "$ref": "#/$defs/Level1Payload"
+    }
+  ],
+  "$defs": {
+    "BasePayload": {
+      "type": "object",
+      "required": ["handle"],
+      "properties": {
+        "handle": {
+          "type": "string",
+          "description": "Desired handle. Must be 3–30 lowercase alphanumeric characters or hyphens.",
+          "pattern": "^[a-z0-9](?:[a-z0-9-]{1,28}[a-z0-9])?$|^[a-z0-9]{3}$",
+          "minLength": 3,
+          "maxLength": 30,
+          "examples": ["my-agent", "acme-bot"]
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Human-readable display name for the agent (max 100 characters)",
+          "maxLength": 100,
+          "examples": ["My Agent", "Acme Bot"]
+        },
+        "role": {
+          "type": "string",
+          "description": "Functional role of this agent. Defaults to 'individual'.",
+          "enum": ["individual", "organization", "service"],
+          "default": "individual"
+        },
+        "lang": {
+          "type": "string",
+          "description": "BCP-47 language tag for the agent's primary operating language",
+          "examples": ["en", "de", "ja", "pt-BR"]
+        }
+      }
+    },
+    "Level0Payload": {
+      "allOf": [{ "$ref": "#/$defs/BasePayload" }],
+      "type": "object",
+      "required": ["tier"],
+      "properties": {
+        "tier": {
+          "type": "integer",
+          "const": 0,
+          "description": "Anonymous registration. No domain ownership required. Subject to strict rate limits."
+        }
+      },
+      "additionalProperties": false,
+      "title": "Level 0 Registration Payload"
+    },
+    "Level1Payload": {
+      "allOf": [{ "$ref": "#/$defs/BasePayload" }],
+      "type": "object",
+      "required": ["tier", "domain"],
+      "properties": {
+        "tier": {
+          "type": "integer",
+          "const": 1,
+          "description": "Domain-verified registration. Requires a DNS TXT record on the supplied domain."
+        },
+        "domain": {
+          "type": "string",
+          "description": "Domain you control. A DNS TXT record ultra-verification=<token> must be added to confirm ownership.",
+          "examples": ["acme.com", "mycompany.io"]
+        },
+        "organizationName": {
+          "type": "string",
+          "description": "Legal or public name of the organization. Recommended when role is 'organization'.",
+          "maxLength": 200,
+          "examples": ["Acme Corporation"]
+        }
+      },
+      "additionalProperties": false,
+      "title": "Level 1 Registration Payload"
+    }
+  }
+}
